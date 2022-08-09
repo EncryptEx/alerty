@@ -1,7 +1,11 @@
 <?php
 session_start();
-
-$actualPath = str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending / 
+if (isset($_SERVER['HTTPS'])) {
+    $extraS = "s";
+} else {
+    $extraS = "";
+}
+$actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending /  // if project is in subfolder, useful when coding in local with an ending / 
 ?>
 
 <!DOCTYPE html>
@@ -100,13 +104,13 @@ $actualPath = str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['P
             
             <div>
                 <p>The simplest way you can check in with the trigger is to use curl and request the url:</p>
-                <code>curl https://<?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
+                <code>curl <?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
             </div><br>
             <div>
                 <p>You can also pass an optional message which via POST</p>
-                <code>curl -d "m=<span class="highlighted">message goes here</span>" https://<?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
+                <code>curl -d "m=<span class="highlighted">message goes here</span>" <?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
                 <p>or the GET method (preferred to encode the URL):</p>
-                <code>curl https://<?php echo $actualPath;?>trigger.php?t=1v4npa5ps&m=<span class="highlighted">message%20goes%20here</span></code>
+                <code>curl <?php echo $actualPath;?>trigger.php?t=1v4npa5ps&m=<span class="highlighted">message%20goes%20here</span></code>
             </div>
             <div>
                 <p>This can be set up in any type of task, including a coding file which has an HTTP Libaray to send the request, Alerty will work. 
@@ -114,7 +118,7 @@ $actualPath = str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['P
                 </p>
                 <h5><b>Real case example:</b></h5>
                 <code>
-                    0 10 * * 1 sudo apt update && sudo apt upgrde -y && curl <span class="highlighted">https://<?php echo $actualPath;?>trigger.php?t=1v4npa5ps</span>
+                    0 10 * * 1 sudo apt update && sudo apt upgrde -y && curl <span class="highlighted"><?php echo $actualPath;?>trigger.php?t=1v4npa5ps</span>
                 </code>
                 <p>This cronjob, apart from updating and upgrading the system every Monday at 10am, it also sends an alert by requesting the trigger Url</p>
             </div>
