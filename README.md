@@ -32,8 +32,7 @@ That's basically the main reason of why I have chosen to build this triggerer we
 ---
 
 ## Philosophy
-I would like to bring this little service open and free to anyone, so feel free to fork it or use it at my hosted version.
-Feel free to use it at [my hosted version](https://alerty.jaumelopez.dev)
+I would like to bring this little service open and free to anyone, so feel free to fork it or use it at [my hosted version](https://alerty.jaumelopez.dev)
 
 ---
 ## Installation
