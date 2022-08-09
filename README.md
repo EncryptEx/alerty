@@ -49,7 +49,7 @@ Feel free to use it at [my hosted version](https://alerty.jaumelopez.dev)
 
     or simply go to the import section after clicking on the database's name. A tutorial can be found [here](https://www.inmotionhosting.com/support/server/databases/import-database-using-phpmyadmin/) or if you prefer the in-line method [this](https://stackoverflow.com/questions/7828060/how-do-i-import-a-sql-data-file-into-sql-server) may help you.
 
-3. Create the .env file by changing the name or copying the **src/private/.env.template** file
+3. Create the .env file by changing the name or copying the **src/private/.env.example** file
     To change the name:
     ```
     mv .env.template .env
