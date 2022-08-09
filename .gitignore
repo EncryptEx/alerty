@@ -1,0 +1,29 @@
+### PHPUnit ###
+# Covers PHPUnit
+# Reference: https://phpunit.de/
+
+# Generated files
+.phpunit.result.cache
+.phpunit.cache
+
+# Build data
+/build/
+
+### Vendors ###
+# Covers PHPUnit
+# Reference: https://phpunit.de/
+
+### Composer ###
+composer.phar
+# Placed the vendor file inside the source code because the hosting wasn't allowing me to have an extra private folder.
+# Next config is because of the local-dev restrictions
+/src/private/vendor/
+# standard vendor gitignore
+vendor/
+
+# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
+
+### Credentials file ###
+/src/private/.env
