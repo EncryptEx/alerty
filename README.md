@@ -4,6 +4,7 @@
 <p align="center">
 <img src="https://img.shields.io/github/languages/code-size/EncryptEx/alerty"/>
 <img src="https://img.shields.io/github/languages/top/EncryptEx/alerty"/>
+<img src="https://tokei.ekzhang.com/b1/github/EncryptEx/alerty"/>
 <img src="https://img.shields.io/github/last-commit/EncryptEx/alerty"/>
 <!-- <a href="https://github.com/EncryptEx/alerty/actions/workflows/main.yml"><img src="https://github.com/EncryptEx/alerty/actions/workflows/main.yml/badge.svg"></img></a> -->
 
