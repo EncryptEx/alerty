@@ -108,7 +108,7 @@ $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(bas
             </div><br>
             <div>
                 <p>You can also pass an optional message which via POST</p>
-                <code>curl -d "m=<span class="highlighted">message goes here</span>" <?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
+                <code>curl -X POST -d "m=<span class="highlighted">message goes here</span>" <?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
                 <p>or the GET method (preferred to encode the URL):</p>
                 <code>curl <?php echo $actualPath;?>trigger.php?t=1v4npa5ps&m=<span class="highlighted">message%20goes%20here</span></code>
             </div>
