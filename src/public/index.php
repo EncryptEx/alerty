@@ -23,6 +23,10 @@ $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(bas
             margin-bottom: 5px;
             display: block;
         }
+
+        .shadow-white{
+            box-shadow: 0 0 5rem rgba(255,255,255,.175)!important;
+        }
         .highlighted {
             color: wheat;
         }
@@ -37,10 +41,9 @@ $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(bas
     <div class="container col-xxl-8 px-4 py-5">
         <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
             <div class="col-10 col-sm-8 col-lg-6">
-                <!-- TODO create image hero nice -->
-                <!-- these br have to be removed when created the new png -->
-                
-                <!-- <img src="hero.png" class="d-block mx-lg-auto img-fluid" alt="" width="700" height="500" loading="lazy"> -->
+                <!-- <div class=" p-3 mb-5 bg-secondary rounded"> -->
+                    <img src="assets/img/alerty-screenshot.png" class="shadow-white d-block mx-lg-auto img-fluid" alt="" width="700" height="500" loading="lazy">
+                <!-- </div> -->
             </div>
             <div class="col-lg-6">
                 <h1 class="display-5 fw-bold lh-1 mb-3">Fast and reliable reply notifications after tasks</h1>
@@ -94,40 +97,41 @@ $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(bas
             </div>
         </div>
     </div>
-    
+
     <hr id="installation">
     <br>
     <!-- installation -->
     <div class="container px-4 py-5">
         <h2 class="pb-2 border-bottom">Installation</h2>
         <div class="row g-4 py-5 row-cols-12">
-            
+
             <div>
                 <p>The simplest way you can check in with the trigger is to use curl and request the url:</p>
-                <code>curl <?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
+                <code>curl <?php echo $actualPath; ?>trigger.php?t=1v4npa5ps</code>
             </div><br>
             <div>
                 <p>You can also pass an optional message which via POST</p>
-                <code>curl -X POST -d "m=<span class="highlighted">message goes here</span>" <?php echo $actualPath;?>trigger.php?t=1v4npa5ps</code>
+                <code>curl -X POST -d "m=<span class="highlighted">message goes here</span>" <?php echo $actualPath; ?>trigger.php?t=1v4npa5ps</code>
                 <p>or the GET method (preferred to encode the URL):</p>
-                <code>curl <?php echo $actualPath;?>trigger.php?t=1v4npa5ps&m=<span class="highlighted">message%20goes%20here</span></code>
+                <code>curl <?php echo $actualPath; ?>trigger.php?t=1v4npa5ps&m=<span class="highlighted">message%20goes%20here</span></code>
             </div>
             <div>
-                <p>This can be set up in any type of task, including a coding file which has an HTTP Libaray to send the request, Alerty will work. 
-                    It also can be placed at the finish of a cronjob. 
+                <p>This can be set up in any type of task, including a coding file which has an HTTP Libaray to send the request, Alerty will work.
+                    It also can be placed at the finish of a cronjob.
                 </p>
                 <h5><b>Real case example:</b></h5>
                 <code>
-                    0 10 * * 1 sudo apt update && sudo apt upgrde -y && curl <span class="highlighted"><?php echo $actualPath;?>trigger.php?t=1v4npa5ps</span>
+                    0 10 * * 1 sudo apt update && sudo apt upgrde -y && curl <span class="highlighted"><?php echo $actualPath; ?>trigger.php?t=1v4npa5ps</span>
                 </code>
                 <p>This cronjob, apart from updating and upgrading the system every Monday at 10am, it also sends an alert by requesting the trigger Url</p>
             </div>
         </div>
-        
-        
-        
+
+
+
         <?php echo file_get_contents(realpath(__DIR__ . '/../private/templates/footer.html')); ?>
     </div><br>
-    
+
 </body>
+
 </html>
