@@ -1,6 +1,6 @@
 <p align="center"><a href="#"><img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.dribbble.com%2Fusers%2F2344150%2Fscreenshots%2F4814121%2F0711_notification_bell_dribble.gif&f=1&nofb=1" alt="Alerty" height="60"/></a></p>
 <h1 align="center">Alerty</h1>
-<p align="center">The bot that keeps calmed down people.</p>
+<p align="center">Fast and reliable reply notifications after tasks.</p>
 <p align="center">
 <img src="https://img.shields.io/github/languages/code-size/EncryptEx/alerty"/>
 <img src="https://img.shields.io/github/languages/top/EncryptEx/alerty"/>
