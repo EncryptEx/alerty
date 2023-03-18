@@ -1,10 +1,12 @@
-<?php 
+<?php
 
 require_once('./../private/utils.php');
+
 use \Utils\Utilities;
+
 $utils = new Utilities();
 
-if(!isset($_GET['t'])) { # if is not set key, die
+if (!isset($_GET['t'])) { # if is not set key, die
     http_response_code(400); # invalid request
     die();
 }
@@ -20,41 +22,48 @@ if ($doesExist['success']) {
     $ownerId = $doesExist['ownerId'];
     $triggerName = $doesExist['name'];
 
-    $data="";
+    $data = "";
     // check if data has been sent
-    if(isset($_GET['m'])) {
+    if (isset($_GET['m'])) {
         $data = $_GET['m'];
-    } 
-    if(isset($_POST['m'])) {
+    }
+    if (isset($_POST['m'])) {
         $data = $_POST['m'];
-    } 
-    
+    }
+    if (isset($_GET['s'])) {
+        $status = $_GET['s'];
+    }
+    if (isset($_POST['s'])) {
+        $status = $_POST['s'];
+    }
 
-    if($utils->getActionName($actionToDo) == "email"){
+
+    if ($utils->getActionName($actionToDo) == "email") {
         # send email to ownerId
 
-        $emailResult = $utils->sendEmailTo($ownerId, $triggerName, $stringUrl, $data);
+        $emailResult = $utils->sendEmailTo($ownerId, $triggerName, $stringUrl, $data, $status);
 
-        if(!$emailResult['success']){
+        if (!$emailResult['success']) {
             http_response_code(500);
             print(json_encode(
                 [
-                    'success'=>FALSE, 
-                    'message'=>$emailResult['message'],
-                    'timestamp'=>time()
-                ]));
+                    'success' => FALSE,
+                    'message' => $emailResult['message'],
+                    'timestamp' => time()
+                ]
+            ));
             die();
         }
-
     } else {
         # id does not match, throw error
         http_response_code(500);
         print(json_encode(
             [
-                'success'=>FALSE, 
-                'message'=>'There was an error while trying to fetch the action type',
-                'timestamp'=>time()
-            ]));
+                'success' => FALSE,
+                'message' => 'There was an error while trying to fetch the action type',
+                'timestamp' => time()
+            ]
+        ));
         die();
     }
 
@@ -62,31 +71,33 @@ if ($doesExist['success']) {
     $result = $utils->triggerLog($triggerId, $data);
 
     if (!$result)  # if couldn't be saved, throw error
-    { 
+    {
         http_response_code(500);
         print(json_encode(
             [
-                'success'=>FALSE, 
-                'message'=>'There was an error while trying to save the log',
-                'timestamp'=>time()
-            ]));
+                'success' => FALSE,
+                'message' => 'There was an error while trying to save the log',
+                'timestamp' => time()
+            ]
+        ));
         die();
     }
 
     http_response_code(200);
     print(json_encode(
         [
-            'success'=>TRUE,
-            'message'=>'Action performed successfully!',
-            'timestamp'=>time()
+            'success' => TRUE,
+            'message' => 'Action performed successfully!',
+            'timestamp' => time()
         ]
     ));
 } else {
     http_response_code(404);
     print(json_encode(
         [
-            'success'=>FALSE, 
-            'message'=>'The requested TriggerID does not exist',
-            'timestamp'=>time()
-        ]));
+            'success' => FALSE,
+            'message' => 'The requested TriggerID does not exist',
+            'timestamp' => time()
+        ]
+    ));
 }
