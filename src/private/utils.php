@@ -681,7 +681,7 @@ class Utilities
 		switch ($exitCode) {
 			case 0:
 				$isError = FALSE;
-				$errorMsg = "Command ran successfuly";
+				$errorMsg = "Command ran successfully";
 				break;
 			case 1:
 				$isError = TRUE;
