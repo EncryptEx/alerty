@@ -23,6 +23,7 @@ if ($doesExist['success']) {
     $triggerName = $doesExist['name'];
 
     $data = "";
+    $status= NULL;
     // check if data has been sent
     if (isset($_GET['m'])) {
         $data = $_GET['m'];

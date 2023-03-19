@@ -168,14 +168,20 @@ class Utilities
 			$templateSubtitle = $parsedError['message'];
 			if ($parsedError['isError']) {
 				$templateColor = "#F1555A";
-				$templateEmoji = "❌";
+				$hoverColor = "#bc4547";
+				$templateEmoji = $this->getEmojiSvg("cross");
+				$titleEmoji = "❌";
 			} else {
-				$templateColor = "#79F69C";
-				$templateEmoji = "✔";
+				$templateColor = "#408140";
+				$hoverColor = "#355435";
+				$templateEmoji = $this->getEmojiSvg("check");
+				$titleEmoji = "✔";
 			}
 		} else {
 			$templateColor = "#41B6DC";
-			$templateEmoji = "⌛";
+			$hoverColor = "#34495e";
+			$templateEmoji = $this->getEmojiSvg("hourglass");
+			$titleEmoji = "⌛";
 		}
 
 
@@ -187,7 +193,7 @@ class Utilities
 
 		//Content
 		$mail->isHTML(true);                                  //Set email format to HTML
-		$mail->Subject = $templateEmoji . ' ' . htmlentities($triggerName) . ' has completed! ';
+		$mail->Subject = $titleEmoji . ' ' . htmlentities($triggerName) . ' has completed! ';
 
 		// prepare raw template
 		$contentNonParsed = file_get_contents(realpath(__DIR__ . '/templates/email.html'));
@@ -200,6 +206,7 @@ class Utilities
 		$actualBody = str_replace("{{ timestamp }}", $timestampToPrint, $actualBody);
 		$actualBody = str_replace("{{ taskName }}", $triggerName, $actualBody);
 		$actualBody = str_replace("{{ background_color }}", $templateColor, $actualBody);
+		$actualBody = str_replace("{{ hover_color }}", $hoverColor, $actualBody);
 		$actualBody = str_replace("{{ emoji }}", $templateEmoji, $actualBody);
 
 		// if data passed, replace it with some nice html, otherwise, remove the template tag
@@ -736,5 +743,35 @@ class Utilities
 				break;
 		}
 		return ['isError' => $isError, 'message' => $errorMsg];
+	}
+
+	/**
+	 * Get emoji svg
+	 * @return string svg picture if found
+	 * @return NULL if not found
+	 */
+	public function getEmojiSvg(string $emojiName){
+			if (isset($_SERVER['HTTPS'])) {
+					$extraS = "s";
+			} else {
+				$extraS = "";
+			}
+			$basePath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending / 
+			
+		switch ($emojiName) {
+			case 'cross':
+				$result = $basePath."assets/img/icons/xmark-solid.png";
+				break;
+			case 'check':
+				$result = $basePath."assets/img/icons/check-solid.png";
+				break;
+			case 'hourglass':
+				$result = $basePath."assets/img/icons/hourglass-end-solid.png";		
+				break;
+			default:
+				$result = NULL;
+				break;
+			}
+			return $result;
 	}
 }
