@@ -625,7 +625,7 @@ class Utilities
 
         $mail->Body = trim($actualBody);
 
-        $mail->AltBody = 'Welcome ' . htmlentities($name) . "!\n 
+        $mail->AltBody = 'Welcome ' . htmlentities($name) . "!\n
 		You can confirm your account email through the link below:\n
 		" . $verifyLink . "\n This is an automated email";
 
