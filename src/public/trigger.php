@@ -2,7 +2,7 @@
 
 require_once('./../private/utils.php');
 
-use \Utils\Utilities;
+use Utils\Utilities;
 
 $utils = new Utilities();
 
@@ -17,13 +17,13 @@ header('Content-type: application/json; charset=utf-8');
 
 $doesExist = $utils->doesExist($stringUrl); # Returned vals: doesExist (bool)? and (if yes), id
 if ($doesExist['success']) {
-    $triggerId = $doesExist['id']; #since does exist, 
+    $triggerId = $doesExist['id']; #since does exist,
     $actionToDo = $doesExist['action'];
     $ownerId = $doesExist['ownerId'];
     $triggerName = $doesExist['name'];
 
     $data = "";
-    $status= NULL;
+    $status= null;
     // check if data has been sent
     if (isset($_GET['m'])) {
         $data = $_GET['m'];
@@ -48,7 +48,7 @@ if ($doesExist['success']) {
             http_response_code(500);
             print(json_encode(
                 [
-                    'success' => FALSE,
+                    'success' => false,
                     'message' => $emailResult['message'],
                     'timestamp' => time()
                 ]
@@ -60,7 +60,7 @@ if ($doesExist['success']) {
         http_response_code(500);
         print(json_encode(
             [
-                'success' => FALSE,
+                'success' => false,
                 'message' => 'There was an error while trying to fetch the action type',
                 'timestamp' => time()
             ]
@@ -71,12 +71,11 @@ if ($doesExist['success']) {
     # save log
     $result = $utils->triggerLog($triggerId, $data);
 
-    if (!$result)  # if couldn't be saved, throw error
-    {
+    if (!$result) {  # if couldn't be saved, throw error
         http_response_code(500);
         print(json_encode(
             [
-                'success' => FALSE,
+                'success' => false,
                 'message' => 'There was an error while trying to save the log',
                 'timestamp' => time()
             ]
@@ -87,7 +86,7 @@ if ($doesExist['success']) {
     http_response_code(200);
     print(json_encode(
         [
-            'success' => TRUE,
+            'success' => true,
             'message' => 'Action performed successfully!',
             'timestamp' => time()
         ]
@@ -96,7 +95,7 @@ if ($doesExist['success']) {
     http_response_code(404);
     print(json_encode(
         [
-            'success' => FALSE,
+            'success' => false,
             'message' => 'The requested TriggerID does not exist',
             'timestamp' => time()
         ]
