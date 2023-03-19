@@ -11,7 +11,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PDO;
 
 # start vendors SHOULD BE LOCATED next to private and public folders all 3 siblings of host root 
-require realpath('./../vendor/autoload.php');
+require realpath('./../../vendor/autoload.php');
 
 # change timezone
 date_default_timezone_set('Europe/Madrid');
