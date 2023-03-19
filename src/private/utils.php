@@ -216,7 +216,7 @@ class Utilities
 			$dataParsed = "";
 		}
 		if ($exitStatus != NULL && is_numeric($exitStatus)) {
-			$dataParsed .= "<p>And recieved this exit code: <code>" . htmlentities($exitStatus) . "</code><br>" . htmlentities($templateSubtitle) . "</p>";
+			$dataParsed .= "<p>And recieved this exit code: <b>" . htmlentities($exitStatus) . "</b> (<code>" . htmlentities($templateSubtitle) . "</code>)</p>";
 		}
 
 
@@ -656,6 +656,7 @@ class Utilities
 
 	/** 
 	 * Verifies a user by setting its status code to 1
+	 * @return bool true if db query succeeds
 	 */
 	public function Verify(string $email)
 	{
@@ -675,6 +676,7 @@ class Utilities
 
 	/** 
 	 * Retrieves the exit error code
+	 * @return string description based on Exit Codes
 	 */
 	public function retrieveExitCode(int $exitCode)
 	{
