@@ -10,7 +10,7 @@ namespace Utils;
 use PHPMailer\PHPMailer\PHPMailer;
 use PDO;
 
-# start vendors SHOULD BE LOCATED next to private and public folders all 3 siblings of host root 
+# start vendors
 require realpath('./../../vendor/autoload.php');
 
 # change timezone
