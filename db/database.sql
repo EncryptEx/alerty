@@ -31,7 +31,8 @@ CREATE TABLE `action-logs` (
   `id` int(11) NOT NULL,
   `triggerId` int(11) NOT NULL,
   `timestamp` int(11) NOT NULL,
-  `extraData` text DEFAULT NULL
+  `extraData` text DEFAULT NULL,
+  `logFilename` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

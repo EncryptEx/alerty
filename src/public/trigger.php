@@ -23,7 +23,7 @@ if ($doesExist['success']) {
     $triggerName = $doesExist['name'];
 
     $data = "";
-    $status= null;
+    $status = null;
     // check if data has been sent
     if (isset($_GET['m'])) {
         $data = $_GET['m'];
@@ -38,11 +38,33 @@ if ($doesExist['success']) {
         $status = $_POST['s'];
     }
 
+    $nameOfFile = NULL;
+    if (isset($_FILES) && count($_FILES) == 1) {
+
+        $uploaddir = "./../private/uploads/";
+        $newName = "log" . time() . ".txt";
+        $uploadfile = $uploaddir . basename($newName);  
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+            $filePath = $uploadfile;
+        } else {
+            http_response_code(500);
+            print(json_encode(
+                [
+                    'success' => false,
+                    'message' => 'There was an error while uploading the file',
+                    'timestamp' => time()
+                ]
+            ));
+            die();
+        }
+    }
+
 
     if ($utils->getActionName($actionToDo) == "email") {
         # send email to ownerId
 
-        $emailResult = $utils->sendEmailTo($ownerId, $triggerName, $stringUrl, $data, $status);
+        $emailResult = $utils->sendEmailTo($ownerId, $triggerName, $stringUrl, $data, $status, $filePath);
 
         if (!$emailResult['success']) {
             http_response_code(500);
@@ -69,7 +91,7 @@ if ($doesExist['success']) {
     }
 
     # save log
-    $result = $utils->triggerLog($triggerId, $data);
+    $result = $utils->triggerLog($triggerId, $data, $nameOfFile);
 
     if (!$result) {  # if couldn't be saved, throw error
         http_response_code(500);

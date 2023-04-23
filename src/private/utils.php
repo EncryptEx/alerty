@@ -64,19 +64,19 @@ class Utilities
      * Saves into the DB the trigger log: triggerid and timestamp
      * @return bool True if was saved successfully
      */
-    public function triggerLog(int $triggerId, string $data)
+    public function triggerLog(int $triggerId, string $data, string $filename = NULL)
     {
         $pdo = $this->databaseConnect();
 
-        $SQL_INSERT = "INSERT INTO `action-logs` (id, triggerId, timestamp, extraData) VALUES (NULL, :triggerId, :timestamp, :extraData)";
+        $SQL_INSERT = "INSERT INTO `action-logs` (id, triggerId, timestamp, extraData, logFilename) VALUES (NULL, :triggerId, :timestamp, :extraData, :logFilename)";
 
         $insrtstmnt = $pdo->prepare($SQL_INSERT);
 
         if ($data != "") {
             // data recieved, save with value
-            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => $data];
+            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => $data, 'logFilename' => $filename];
         } else {
-            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => null];
+            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => null, 'logFilename' => $filename];
         }
         return $insrtstmnt->execute($input);
     }
@@ -136,7 +136,7 @@ class Utilities
      * @return array bool: success is false when something went wrong, explained in message
      *
      */
-    public function sendEmailTo(int $ownerId, string $triggerName, string $stringUrl, $dataRecieved = '', $exitStatus = null)
+    public function sendEmailTo(int $ownerId, string $triggerName, string $stringUrl, $dataRecieved = '', $exitStatus = null, $filePath = NULL)
     {
         // Initiate mailer class
         $mail = new PHPMailer();
@@ -181,6 +181,13 @@ class Utilities
             $titleEmoji = "⌛";
         }
 
+        $isLog = FALSE;
+        if ($filePath != NULL) {
+            // Read file and print it on email
+            $isLog = TRUE;
+            $logContent = htmlentities(file_get_contents($filePath));
+        }
+
 
         // Add recipient
         $mail->addAddress($ownerData['email']);
@@ -205,15 +212,24 @@ class Utilities
         $actualBody = str_replace("{{ background_color }}", $templateColor, $actualBody);
         $actualBody = str_replace("{{ hover_color }}", $hoverColor, $actualBody);
         $actualBody = str_replace("{{ emoji }}", $templateEmoji, $actualBody);
+        if ($isLog) {
+            // place content into log section
+            $actualBody = str_replace("{{ logTitle }}", "Here's the log recieved:", $actualBody);
+            $actualBody = str_replace("{{ logBlob }}", "<pre>" . $logContent . "</pre>", $actualBody);
+        } else {
+            // remove placeholder and hide from email
+            $actualBody = str_replace("{{ logTitle }}", "", $actualBody);
+            $actualBody = str_replace("{{ logBlob }}", "", $actualBody);
+        }
 
         // if data passed, replace it with some nice html, otherwise, remove the template tag
         if ($dataRecieved != "") {
-            $dataParsed = "<p>And recieved this data: <code>" . htmlentities($dataRecieved) . "</code></p>";
+            $dataParsed = "<p>Collected this data: <code>" . htmlentities($dataRecieved) . "</code></p>";
         } else {
             $dataParsed = "";
         }
         if ($exitStatus != null && is_numeric($exitStatus)) {
-            $dataParsed .= "<p>And recieved this exit code: <b>" . htmlentities($exitStatus) . "</b> (<code>" . htmlentities($templateSubtitle) . "</code>)</p>";
+            $dataParsed .= "<p>Recieved this exit code: <b>" . htmlentities($exitStatus) . "</b> (<code>" . htmlentities($templateSubtitle) . "</code>)</p>";
         }
 
 
@@ -760,13 +776,13 @@ class Utilities
 
         switch ($emojiName) {
             case 'cross':
-                $result = $basePath."assets/img/icons/xmark-solid.png";
+                $result = $basePath . "assets/img/icons/xmark-solid.png";
                 break;
             case 'check':
-                $result = $basePath."assets/img/icons/check-solid.png";
+                $result = $basePath . "assets/img/icons/check-solid.png";
                 break;
             case 'hourglass':
-                $result = $basePath."assets/img/icons/hourglass-end-solid.png";
+                $result = $basePath . "assets/img/icons/hourglass-end-solid.png";
                 break;
             default:
                 $result = null;
