@@ -199,6 +199,7 @@ if (isset($_GET['s'])) {
                         <tr>
                             <th scope="col">Timestamp</th>
                             <th scope="col">Data</th>
+                            <th scope="col">Logfile</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -206,6 +207,7 @@ if (isset($_GET['s'])) {
                         <tr>
                             <td><?php echo  htmlentities(date("d/m/Y H:i:s", $data['timestamp']));?></td>
                             <td><?php echo htmlentities($data['extraData']);?></td>
+                            <td><?php echo htmlentities($data['logFilename']);?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

@@ -38,7 +38,8 @@ if ($doesExist['success']) {
         $status = $_POST['s'];
     }
 
-    $nameOfFile = NULL;
+    $filePath = NULL;
+    $newName = NULL;
     if (isset($_FILES) && count($_FILES) == 1) {
 
         $uploaddir = "./../private/uploads/";
@@ -91,7 +92,7 @@ if ($doesExist['success']) {
     }
 
     # save log
-    $result = $utils->triggerLog($triggerId, $data, $nameOfFile);
+    $result = $utils->triggerLog($triggerId, $data, $newName);
 
     if (!$result) {  # if couldn't be saved, throw error
         http_response_code(500);
