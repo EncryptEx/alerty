@@ -184,7 +184,7 @@ if (isset($_GET['s'])) {
                 <canvas id="myChart"></canvas>
 
             </div>
-            <div class="col-12 mt-5"></div>
+            <div class="col-12 mt-5">
             <h6>Data History</h6>
             <p class="text-muted">Showing only the last 100 data entries</p>
             <?php
@@ -192,7 +192,7 @@ if (isset($_GET['s'])) {
             // TODO pagination to avoid printing 100k items, for now, just last 100 items
             $allData = $utils->getAllData($trigger['id'], 100);
             if (!boolval($allData['success'])) : ?>
-                <p class='text-muted'>No data recieved yet. Remember that it needs to be passed through the <code>m</code> parameter</p>
+                <p class='text-muted'>No data nor files recieved yet. Remember that it needs to be passed through the <code>m</code> parameter (-d "m=message" in curl) and files need to be <code>uploaded</code> (-F @/path/file.txt in curl)</p>
             <?php else : ?>
                 <table class="table table-dark">
                     <thead>
@@ -207,12 +207,15 @@ if (isset($_GET['s'])) {
                         <tr>
                             <td><?php echo  htmlentities(date("d/m/Y H:i:s", $data['timestamp']));?></td>
                             <td><?php echo htmlentities($data['extraData']);?></td>
-                            <td><?php echo htmlentities($data['logFilename']);?></td>
+                            <td><a href="logview.php?triggerId=<?php echo htmlentities($trigger['stringUrl']);?>&file=<?php echo htmlentities($data['logFilename']);?>">Log available</a></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             <?php endif; ?>
+            </div>
+
+            <!-- Javscript code starts here -->
             <script defer>
                 function copy() {
                     // clipboard

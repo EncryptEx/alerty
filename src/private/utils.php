@@ -543,7 +543,7 @@ class Utilities
         } else {
             $limitToPrint = "LIMIT " . $sqlLimit;
         }
-        $SQL_SELECT = "SELECT * FROM `action-logs` WHERE triggerId=:triggerId  AND extraData IS NOT NULL ORDER BY `timestamp` DESC " . $limitToPrint;
+        $SQL_SELECT = "SELECT extraData,logFilename,timestamp FROM `action-logs` WHERE triggerId=:triggerId  AND extraData IS NOT NULL OR logFilename IS NOT NULL ORDER BY `timestamp` DESC " . $limitToPrint;
         $selectStmt = $pdo->prepare($SQL_SELECT);
         $input =   ['triggerId' => $triggerId];
         $selectStmt->execute($input);
@@ -551,7 +551,7 @@ class Utilities
         $toReturn = array();
         if ($selectStmt->rowCount() > 0) {
             foreach ($selectStmt as $row) {
-                array_push($toReturn, ['extraData' => $row['extraData'], 'timestamp' => $row['timestamp']]);
+                array_push($toReturn, ['extraData' => $row['extraData'], 'logFilename'=> $row['logFilename'], 'timestamp' => $row['timestamp']]);
             }
             return ['success' => true, 'allData' => $toReturn];
         }
