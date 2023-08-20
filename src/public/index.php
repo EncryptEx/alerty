@@ -121,9 +121,14 @@ $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(bas
                 </p>
                 <h5><b>Real case example:</b></h5>
                 <code>
-                    0 10 * * 1 sudo apt update && sudo apt upgrde -y && curl <span class="highlighted"><?php echo $actualPath; ?>trigger.php?t=1v4npa5ps</span>
+                    0 10 * * 1 sudo python3 /path/to/worker.py > /var/log/worker.log && curl -X POST <span class="highlighted">-d "s=$?"</span> <?php echo $actualPath; ?>trigger.php?t=1v4npa5ps
                 </code>
-                <p>This cronjob, apart from updating and upgrading the system every Monday at 10am, it also sends an alert by requesting the trigger Url</p>
+                <p>This cronjob, apart from updating and upgrading the system every Monday at 10am, it sends an alert by requesting the trigger Url and passes the <b>exit code</b> using the <span class="highlighted">s</span> parameter</p>
+                <br>
+                <p>Another example but in this case, uploading a log file or artifact, would be as following: </p>
+                <code>
+                    0 10 * * 1 sudo python3 /path/to/worker.py > /var/log/worker.log && curl -X POST <span class="highlighted">-F file=@/var/log/worker.log </span><?php echo $actualPath; ?>trigger.php?t=1v4npa5ps
+                </code>
             </div>
         </div>
 
