@@ -799,7 +799,7 @@ class Utilities
      * Checks if the filename of a log is attached to a specific triggerId
      * @return bool true if it does, false if it does not.
      */
-    public function isLogFromtrigger(string $triggerId, string $logFilename) {
+    public function isLogFromtrigger(string $triggerId, string $logFilename): bool {
         $pdo = $this->databaseConnect();
         $SQL_SELECT = "SELECT id FROM `action-logs` WHERE triggerId=:triggerId AND logFilename=:logFilename LIMIT 1";
         $selectStmt = $pdo->prepare($SQL_SELECT);
@@ -810,5 +810,31 @@ class Utilities
             return true;
         }
         return  false;
+    }
+
+
+    /**
+     * Returns the content of a valid log file. It has to be in the uploads dir.
+     * @return string
+     */
+    public function readLogFile(string $filename) : string {
+        $allowed = $this->getAllLogfilesNames();
+        if (!in_array($filename, $allowed)) {
+            return "ERROR: File not found";
+        }
+        return file_get_contents("./../private/uploads/".$filename);
+    }
+
+    /**
+     * Gets all filenames of the uploads dir and removes . .. and .gitignore from list.
+     * @return array Array of strings, which are filenames in the uploads dir.
+     */
+    public function getAllLogfilesNames() : array {
+        $path = "./../private/uploads";
+        $files = scandir($path);
+        // Remove elements . .. and .gitignore
+        $filenames = array_diff($files, array('.', '..', '.gitignore'));
+        
+        return $filenames;
     }
 }

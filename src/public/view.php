@@ -210,7 +210,7 @@ if (isset($_GET['s'])) {
                         <tr>
                             <td><?php echo  htmlentities(date("d/m/Y H:i:s", $data['timestamp']));?></td>
                             <td><?php echo htmlentities($data['extraData']);?></td>
-                            <td><a href="logview.php?t=<?php echo htmlentities($trigger['stringUrl']);?>&f=<?php echo htmlentities($data['logFilename']);?>">Log available</a></td>
+                            <td><a href="logview.php?t=<?php echo htmlentities($trigger['stringUrl']);?>&f=<?php echo htmlentities($data['logFilename'])."&d=".$data['timestamp'];?>">Log available</a></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
