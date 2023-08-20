@@ -558,6 +558,10 @@ class Utilities
         return  ['success' => false];
     }
 
+    /**
+     * Checks if user is on the users table
+     * @return bool true if it is, false if not.
+     */
     public function doesUserExist(string $email)
     {
         $pdo = $this->databaseConnect();
@@ -789,5 +793,22 @@ class Utilities
                 break;
         }
         return $result;
+    }
+
+    /**
+     * Checks if the filename of a log is attached to a specific triggerId
+     * @return bool true if it does, false if it does not.
+     */
+    public function isLogFromtrigger(string $triggerId, string $logFilename) {
+        $pdo = $this->databaseConnect();
+        $SQL_SELECT = "SELECT id FROM `action-logs` WHERE triggerId=:triggerId AND logFilename=:logFilename LIMIT 1";
+        $selectStmt = $pdo->prepare($SQL_SELECT);
+        $input =   ['triggerId' => $triggerId, 'logFilename'=> $logFilename];
+        $selectStmt->execute($input);
+
+        if ($selectStmt->rowCount() > 0) {
+            return true;
+        }
+        return  false;
     }
 }

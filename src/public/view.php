@@ -28,6 +28,9 @@ if (isset($_GET['e'])) {
     if ($_GET['e'] == 1) {
         $errorMsg = "Missing data, please fill the inputs.";
     }
+    if ($_GET['e'] == 2) {
+        $errorMsg = "The requested log file is not attached to this trigger.";
+    }
 }
 if (isset($_GET['s'])) {
     if ($_GET['s'] == 1) {
@@ -207,7 +210,7 @@ if (isset($_GET['s'])) {
                         <tr>
                             <td><?php echo  htmlentities(date("d/m/Y H:i:s", $data['timestamp']));?></td>
                             <td><?php echo htmlentities($data['extraData']);?></td>
-                            <td><a href="logview.php?triggerId=<?php echo htmlentities($trigger['stringUrl']);?>&file=<?php echo htmlentities($data['logFilename']);?>">Log available</a></td>
+                            <td><a href="logview.php?t=<?php echo htmlentities($trigger['stringUrl']);?>&f=<?php echo htmlentities($data['logFilename']);?>">Log available</a></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
