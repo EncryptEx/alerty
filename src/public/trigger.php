@@ -42,10 +42,10 @@ if ($doesExist['success']) {
     $newName = NULL;
     if (isset($_FILES) && count($_FILES) == 1) {
 
-        $uploaddir = "./../private/uploads/";
-        $newName = "log" . time() . ".txt";
-        $uploadfile = $uploaddir . basename($newName);  
-
+        $uploaddir = "/../private/uploads/";
+        $newName = "log" . time() . "-". $triggerId . ".txt";
+        $uploadfile = __DIR__ . $uploaddir . $newName;  
+        
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
             $filePath = $uploadfile;
         } else {
