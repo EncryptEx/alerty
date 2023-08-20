@@ -2,9 +2,9 @@
 session_start();
 require './../private/utils.php';
 
-use \Utils\Utilities;
+use Utils\Utilities;
 
-$utils = new Utilities;
+$utils = new Utilities();
 $utils->redirectIfNotLogged();
 
 if (!isset($_GET['t'])) {
@@ -14,19 +14,22 @@ if (!isset($_GET['t'])) {
 
 $trigger = $utils->getTriggerData($_SESSION['userid'], $_GET['t']);
 if (!$trigger['success']) {
-    //something failed while fethcing that triggerid, 
+    //something failed while fethcing that triggerid,
     // simply doesn't exist, or is not owned by that user
     header('location:dashboard.php?e=1');
     die();
 }
 
 
-// error and success alerts 
+// error and success alerts
 $errorMsg = "";
 $successMsg = "";
 if (isset($_GET['e'])) {
     if ($_GET['e'] == 1) {
         $errorMsg = "Missing data, please fill the inputs.";
+    }
+    if ($_GET['e'] == 2) {
+        $errorMsg = "The requested log file is not attached to this trigger.";
     }
 }
 if (isset($_GET['s'])) {
@@ -58,10 +61,10 @@ if (isset($_GET['s'])) {
     <div class="container col-xxl-8 px-4 py-5">
         <div class="col-12">
             <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert" style="display: <?php if ($errorMsg != "") {
-                                                                                                                                    echo "block";
-                                                                                                                                } else {
-                                                                                                                                    echo "none";
-                                                                                                                                } ?> !important">
+                echo "block";
+            } else {
+                echo "none";
+            } ?> !important">
                 <span class="material-symbols-outlined align-middle" style="margin-right:10px">
                     warning
                 </span>
@@ -71,10 +74,10 @@ if (isset($_GET['s'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="window.location.href = window.location.href.split('&')[0];"></button>
             </div>
             <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert" style="display: <?php if ($successMsg != "") {
-                                                                                                                                    echo "block";
-                                                                                                                                } else {
-                                                                                                                                    echo "none";
-                                                                                                                                } ?> !important">
+                echo "block";
+            } else {
+                echo "none";
+            } ?> !important">
                 <span class="material-symbols-outlined align-middle" style="margin-right:10px">
                     check_circle
                 </span>
@@ -146,11 +149,11 @@ if (isset($_GET['s'])) {
                 <p class="white-text">⌛ Last triggered:
                     <?php
                     $timestamp = $utils->getLastTrigger($trigger['id']);
-                    if ($timestamp == 0) :
-                        echo 'never';
-                    else :
-                        echo $utils->time_since(time() - $timestamp) . " ago";
-                    ?>
+if ($timestamp == 0) :
+    echo 'never';
+else :
+    echo $utils->time_since(time() - $timestamp) . " ago";
+    ?>
                         <span class="text-muted d-block d-sm-inline">(<?php echo date("d M Y H:i:s", $timestamp); ?>)</span>
                     <?php endif; ?>
                 </p>
@@ -159,13 +162,13 @@ if (isset($_GET['s'])) {
                 <div class="d-inline-block text-decoration-none text-muted text-break">
                     <span class="align-middle d-inline" id="triggerUrl">
                         <?php
-                        if (isset($_SERVER['HTTPS'])) {
-                            $extraS = "s";
-                        } else {
-                            $extraS = "";
-                        }
-                        $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending / 
-                        echo $actualPath . "trigger.php?t=" . $trigger['stringUrl']; ?>
+        if (isset($_SERVER['HTTPS'])) {
+            $extraS = "s";
+        } else {
+            $extraS = "";
+        }
+        $actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending /
+echo $actualPath . "trigger.php?t=" . $trigger['stringUrl']; ?>
                     </span>
                     <a class="btn btn-dark d-inline text-muted" onclick="copy();" id="buttonId" style="padding-bottom:12px;">
                         <span class="material-symbols-outlined align-middle">
@@ -184,21 +187,22 @@ if (isset($_GET['s'])) {
                 <canvas id="myChart"></canvas>
 
             </div>
-            <div class="col-12 mt-5"></div>
+            <div class="col-12 mt-5">
             <h6>Data History</h6>
             <p class="text-muted">Showing only the last 100 data entries</p>
             <?php
-            
+
             // TODO pagination to avoid printing 100k items, for now, just last 100 items
             $allData = $utils->getAllData($trigger['id'], 100);
-            if (!boolval($allData['success'])) : ?>
-                <p class='text-muted'>No data recieved yet. Remember that it needs to be passed through the <code>m</code> parameter</p>
+if (!boolval($allData['success'])) : ?>
+                <p class='text-muted'>No data nor files recieved yet. Remember that it needs to be passed through the <code>m</code> parameter (-d "m=message" in curl) and files need to be <code>uploaded</code> (-F @/path/file.txt in curl)</p>
             <?php else : ?>
                 <table class="table table-dark">
                     <thead>
                         <tr>
                             <th scope="col">Timestamp</th>
                             <th scope="col">Data</th>
+                            <th scope="col">Logfile</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -206,11 +210,15 @@ if (isset($_GET['s'])) {
                         <tr>
                             <td><?php echo  htmlentities(date("d/m/Y H:i:s", $data['timestamp']));?></td>
                             <td><?php echo htmlentities($data['extraData']);?></td>
+                            <td><a href="logview.php?t=<?php echo htmlentities($trigger['stringUrl']);?>&f=<?php echo htmlentities($data['logFilename'])."&d=".$data['timestamp'];?>">Log available</a></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             <?php endif; ?>
+            </div>
+
+            <!-- Javscript code starts here -->
             <script defer>
                 function copy() {
                     // clipboard
@@ -231,7 +239,7 @@ if (isset($_GET['s'])) {
                 }
             </script>
             <script defer>
-                // historic chart 
+                // historic chart
                 function ConvertDate(UNIXtimestamp) {
                     timestamp = UNIXtimestamp * 1000;
                     date = new Date(timestamp);

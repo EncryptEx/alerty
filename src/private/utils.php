@@ -64,19 +64,19 @@ class Utilities
      * Saves into the DB the trigger log: triggerid and timestamp
      * @return bool True if was saved successfully
      */
-    public function triggerLog(int $triggerId, string $data)
+    public function triggerLog(int $triggerId, string $data, string $filename = null)
     {
         $pdo = $this->databaseConnect();
 
-        $SQL_INSERT = "INSERT INTO `action-logs` (id, triggerId, timestamp, extraData) VALUES (NULL, :triggerId, :timestamp, :extraData)";
+        $SQL_INSERT = "INSERT INTO `action-logs` (id, triggerId, timestamp, extraData, logFilename) VALUES (NULL, :triggerId, :timestamp, :extraData, :logFilename)";
 
         $insrtstmnt = $pdo->prepare($SQL_INSERT);
 
         if ($data != "") {
             // data recieved, save with value
-            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => $data];
+            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => $data, 'logFilename' => $filename];
         } else {
-            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => null];
+            $input = ['triggerId' => $triggerId, 'timestamp' => time(), 'extraData' => null, 'logFilename' => $filename];
         }
         return $insrtstmnt->execute($input);
     }
@@ -136,7 +136,7 @@ class Utilities
      * @return array bool: success is false when something went wrong, explained in message
      *
      */
-    public function sendEmailTo(int $ownerId, string $triggerName, string $stringUrl, $dataRecieved = '', $exitStatus = null)
+    public function sendEmailTo(int $ownerId, string $triggerName, string $stringUrl, $dataRecieved = '', $exitStatus = null, $filePath = null)
     {
         // Initiate mailer class
         $mail = new PHPMailer();
@@ -181,6 +181,13 @@ class Utilities
             $titleEmoji = "⌛";
         }
 
+        $isLog = false;
+        if ($filePath != null) {
+            // Read file and print it on email
+            $isLog = true;
+            $logContent = htmlentities(file_get_contents($filePath));
+        }
+
 
         // Add recipient
         $mail->addAddress($ownerData['email']);
@@ -205,15 +212,24 @@ class Utilities
         $actualBody = str_replace("{{ background_color }}", $templateColor, $actualBody);
         $actualBody = str_replace("{{ hover_color }}", $hoverColor, $actualBody);
         $actualBody = str_replace("{{ emoji }}", $templateEmoji, $actualBody);
+        if ($isLog) {
+            // place content into log section
+            $actualBody = str_replace("{{ logTitle }}", "Here's the log recieved:", $actualBody);
+            $actualBody = str_replace("{{ logBlob }}", "<pre>" . $logContent . "</pre>", $actualBody);
+        } else {
+            // remove placeholder and hide from email
+            $actualBody = str_replace("{{ logTitle }}", "", $actualBody);
+            $actualBody = str_replace("{{ logBlob }}", "", $actualBody);
+        }
 
         // if data passed, replace it with some nice html, otherwise, remove the template tag
         if ($dataRecieved != "") {
-            $dataParsed = "<p>And recieved this data: <code>" . htmlentities($dataRecieved) . "</code></p>";
+            $dataParsed = "<p>Collected this data: <code>" . htmlentities($dataRecieved) . "</code></p>";
         } else {
             $dataParsed = "";
         }
         if ($exitStatus != null && is_numeric($exitStatus)) {
-            $dataParsed .= "<p>And recieved this exit code: <b>" . htmlentities($exitStatus) . "</b> (<code>" . htmlentities($templateSubtitle) . "</code>)</p>";
+            $dataParsed .= "<p>Recieved this exit code: <b>" . htmlentities($exitStatus) . "</b> (<code>" . htmlentities($templateSubtitle) . "</code>)</p>";
         }
 
 
@@ -527,7 +543,7 @@ class Utilities
         } else {
             $limitToPrint = "LIMIT " . $sqlLimit;
         }
-        $SQL_SELECT = "SELECT * FROM `action-logs` WHERE triggerId=:triggerId  AND extraData IS NOT NULL ORDER BY `timestamp` DESC " . $limitToPrint;
+        $SQL_SELECT = "SELECT extraData,logFilename,timestamp FROM `action-logs` WHERE triggerId=:triggerId  AND extraData IS NOT NULL OR logFilename IS NOT NULL ORDER BY `timestamp` DESC " . $limitToPrint;
         $selectStmt = $pdo->prepare($SQL_SELECT);
         $input =   ['triggerId' => $triggerId];
         $selectStmt->execute($input);
@@ -535,13 +551,17 @@ class Utilities
         $toReturn = array();
         if ($selectStmt->rowCount() > 0) {
             foreach ($selectStmt as $row) {
-                array_push($toReturn, ['extraData' => $row['extraData'], 'timestamp' => $row['timestamp']]);
+                array_push($toReturn, ['extraData' => $row['extraData'], 'logFilename'=> $row['logFilename'], 'timestamp' => $row['timestamp']]);
             }
             return ['success' => true, 'allData' => $toReturn];
         }
         return  ['success' => false];
     }
 
+    /**
+     * Checks if user is on the users table
+     * @return bool true if it is, false if not.
+     */
     public function doesUserExist(string $email)
     {
         $pdo = $this->databaseConnect();
@@ -760,18 +780,64 @@ class Utilities
 
         switch ($emojiName) {
             case 'cross':
-                $result = $basePath."assets/img/icons/xmark-solid.png";
+                $result = $basePath . "assets/img/icons/xmark-solid.png";
                 break;
             case 'check':
-                $result = $basePath."assets/img/icons/check-solid.png";
+                $result = $basePath . "assets/img/icons/check-solid.png";
                 break;
             case 'hourglass':
-                $result = $basePath."assets/img/icons/hourglass-end-solid.png";
+                $result = $basePath . "assets/img/icons/hourglass-end-solid.png";
                 break;
             default:
                 $result = null;
                 break;
         }
         return $result;
+    }
+
+    /**
+     * Checks if the filename of a log is attached to a specific triggerId
+     * @return bool true if it does, false if it does not.
+     */
+    public function isLogFromtrigger(string $triggerId, string $logFilename): bool
+    {
+        $pdo = $this->databaseConnect();
+        $SQL_SELECT = "SELECT id FROM `action-logs` WHERE triggerId=:triggerId AND logFilename=:logFilename LIMIT 1";
+        $selectStmt = $pdo->prepare($SQL_SELECT);
+        $input =   ['triggerId' => $triggerId, 'logFilename'=> $logFilename];
+        $selectStmt->execute($input);
+
+        if ($selectStmt->rowCount() > 0) {
+            return true;
+        }
+        return  false;
+    }
+
+
+    /**
+     * Returns the content of a valid log file. It has to be in the uploads dir.
+     * @return string
+     */
+    public function readLogFile(string $filename): string
+    {
+        $allowed = $this->getAllLogfilesNames();
+        if (!in_array($filename, $allowed)) {
+            return "ERROR: File not found";
+        }
+        return file_get_contents("./../private/uploads/".$filename);
+    }
+
+    /**
+     * Gets all filenames of the uploads dir and removes . .. and .gitignore from list.
+     * @return array Array of strings, which are filenames in the uploads dir.
+     */
+    public function getAllLogfilesNames(): array
+    {
+        $path = "./../private/uploads";
+        $files = scandir($path);
+        // Remove elements . .. and .gitignore
+        $filenames = array_diff($files, array('.', '..', '.gitignore'));
+
+        return $filenames;
     }
 }
