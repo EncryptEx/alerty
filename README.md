@@ -39,7 +39,7 @@ I would like to bring this little service open and free to anyone, so feel free 
 ## Installation
 1. First, clone the repository and install all the dependencies:
     ```sh 
-    composer update
+    composer install
     ```
     Depending of your hosting provider you will need to move the ``vendor`` folder inside the ``private`` folder because of permission conflicts with the user www-data (happened in my case). If this happens to you, you'll need to change the path of the vendor's autoload at the ``src/private/utils.php`` file (line 15).
 
@@ -48,6 +48,11 @@ I would like to bring this little service open and free to anyone, so feel free 
     **db/database.sql**
 
     or simply go to the import section after clicking on the database's name. A tutorial can be found [here](https://www.inmotionhosting.com/support/server/databases/import-database-using-phpmyadmin/) or if you prefer the in-line method [this](https://stackoverflow.com/questions/7828060/how-do-i-import-a-sql-data-file-into-sql-server) may help you.
+
+    If you want the terminal option just do:
+    ```
+    mysql -u <db_user> -p <db_name> ./db/database.sql
+    ```
 
 3. Create the .env file by changing the name or copying the **src/private/.env.example** file
     To change the name:
