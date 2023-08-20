@@ -239,7 +239,7 @@ if (!boolval($allData['success'])) : ?>
                 }
             </script>
             <script defer>
-                // historic chart 
+                // historic chart
                 function ConvertDate(UNIXtimestamp) {
                     timestamp = UNIXtimestamp * 1000;
                     date = new Date(timestamp);
