@@ -48,7 +48,7 @@ if ($doesExist['success']) {
         
 
         $allowed = array('txt', 'log');
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
         if (!in_array($ext, $allowed)) {
             http_response_code(500);
             print(json_encode(
