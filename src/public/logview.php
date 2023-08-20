@@ -2,9 +2,9 @@
 session_start();
 require './../private/utils.php';
 
-use \Utils\Utilities;
+use Utils\Utilities;
 
-$utils = new Utilities;
+$utils = new Utilities();
 $utils->redirectIfNotLogged();
 
 if (!isset($_GET['t'])) {
@@ -14,7 +14,7 @@ if (!isset($_GET['t'])) {
 
 $trigger = $utils->getTriggerData($_SESSION['userid'], $_GET['t']);
 if (!$trigger['success']) {
-    //something failed while fethcing that triggerid, 
+    //something failed while fethcing that triggerid,
     // simply doesn't exist, or is not owned by that user
     header('location:dashboard.php?e=1');
     die();

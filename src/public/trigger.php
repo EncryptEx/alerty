@@ -38,14 +38,14 @@ if ($doesExist['success']) {
         $status = $_POST['s'];
     }
 
-    $filePath = NULL;
-    $newName = NULL;
+    $filePath = null;
+    $newName = null;
     if (isset($_FILES) && count($_FILES) == 1) {
 
         $uploaddir = "/../private/uploads/";
         $newName = "log" . time() . "-". $triggerId . ".txt";
-        $uploadfile = __DIR__ . $uploaddir . $newName;  
-        
+        $uploadfile = __DIR__ . $uploaddir . $newName;
+
 
         $allowed = array('txt', 'log');
         $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
@@ -58,7 +58,7 @@ if ($doesExist['success']) {
                     'timestamp' => time()
                 ]
             ));
-            die(); 
+            die();
         }
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
