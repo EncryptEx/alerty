@@ -211,7 +211,7 @@ if (!boolval($allData['success'])) : ?>
                             <td><?php echo  htmlentities(date("d/m/Y H:i:s", $data['timestamp']));?></td>
                             <td><?php echo htmlentities($data['extraData']);?></td>
                             <td>
-                            <?php if ($data['logFilename'] != NULL): ?>
+                            <?php if ($data['logFilename'] != null): ?>
                                 <a href="logview.php?t=<?php echo htmlentities($trigger['stringUrl']);?>&f=<?php echo htmlentities($data['logFilename'])."&d=".$data['timestamp'];?>">Log available</a>
                             <?php endif; ?>
                             </td>
