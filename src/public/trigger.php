@@ -46,6 +46,21 @@ if ($doesExist['success']) {
         $newName = "log" . time() . "-". $triggerId . ".txt";
         $uploadfile = __DIR__ . $uploaddir . $newName;  
         
+
+        $allowed = array('txt', 'log');
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            http_response_code(500);
+            print(json_encode(
+                [
+                    'success' => false,
+                    'message' => 'Only .txt and .log extensions are supported',
+                    'timestamp' => time()
+                ]
+            ));
+            die(); 
+        }
+
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
             $filePath = $uploadfile;
         } else {
