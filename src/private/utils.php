@@ -64,7 +64,7 @@ class Utilities
      * Saves into the DB the trigger log: triggerid and timestamp
      * @return bool True if was saved successfully
      */
-    public function triggerLog(int $triggerId, string $data, string $filename = NULL)
+    public function triggerLog(int $triggerId, string $data, string $filename = null)
     {
         $pdo = $this->databaseConnect();
 
@@ -136,7 +136,7 @@ class Utilities
      * @return array bool: success is false when something went wrong, explained in message
      *
      */
-    public function sendEmailTo(int $ownerId, string $triggerName, string $stringUrl, $dataRecieved = '', $exitStatus = null, $filePath = NULL)
+    public function sendEmailTo(int $ownerId, string $triggerName, string $stringUrl, $dataRecieved = '', $exitStatus = null, $filePath = null)
     {
         // Initiate mailer class
         $mail = new PHPMailer();
@@ -181,10 +181,10 @@ class Utilities
             $titleEmoji = "⌛";
         }
 
-        $isLog = FALSE;
-        if ($filePath != NULL) {
+        $isLog = false;
+        if ($filePath != null) {
             // Read file and print it on email
-            $isLog = TRUE;
+            $isLog = true;
             $logContent = htmlentities(file_get_contents($filePath));
         }
 
@@ -799,7 +799,8 @@ class Utilities
      * Checks if the filename of a log is attached to a specific triggerId
      * @return bool true if it does, false if it does not.
      */
-    public function isLogFromtrigger(string $triggerId, string $logFilename): bool {
+    public function isLogFromtrigger(string $triggerId, string $logFilename): bool
+    {
         $pdo = $this->databaseConnect();
         $SQL_SELECT = "SELECT id FROM `action-logs` WHERE triggerId=:triggerId AND logFilename=:logFilename LIMIT 1";
         $selectStmt = $pdo->prepare($SQL_SELECT);
@@ -817,7 +818,8 @@ class Utilities
      * Returns the content of a valid log file. It has to be in the uploads dir.
      * @return string
      */
-    public function readLogFile(string $filename) : string {
+    public function readLogFile(string $filename): string
+    {
         $allowed = $this->getAllLogfilesNames();
         if (!in_array($filename, $allowed)) {
             return "ERROR: File not found";
@@ -829,12 +831,13 @@ class Utilities
      * Gets all filenames of the uploads dir and removes . .. and .gitignore from list.
      * @return array Array of strings, which are filenames in the uploads dir.
      */
-    public function getAllLogfilesNames() : array {
+    public function getAllLogfilesNames(): array
+    {
         $path = "./../private/uploads";
         $files = scandir($path);
         // Remove elements . .. and .gitignore
         $filenames = array_diff($files, array('.', '..', '.gitignore'));
-        
+
         return $filenames;
     }
 }

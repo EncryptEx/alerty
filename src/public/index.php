@@ -5,7 +5,7 @@ if (isset($_SERVER['HTTPS'])) {
 } else {
     $extraS = "";
 }
-$actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending /  // if project is in subfolder, useful when coding in local with an ending / 
+$actualPath = "http" . $extraS . "://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_FILENAME']), "", $_SERVER['PHP_SELF']); // if project is in subfolder, useful when coding in local with an ending /  // if project is in subfolder, useful when coding in local with an ending /
 ?>
 
 <!DOCTYPE html>
