@@ -85,20 +85,20 @@ class Utilities
      * Returns the name of that actionID
      * @return string Action's name
      */
-    public function getActionName(int $actionId)
+    public function getActionId(int $actionId)
     {
         # Connect to DB
         $pdo = $this->databaseConnect();
 
         # Check if does exist, either return error msg
-        $SQL_SELECT = "SELECT name FROM `action-types` WHERE id=:id LIMIT 1";
+        $SQL_SELECT = "SELECT id FROM `action-types` WHERE id=:id LIMIT 1";
         $selectStmt = $pdo->prepare($SQL_SELECT);
         $input =   ['id' => $actionId];
         $selectStmt->execute($input);
 
         if ($selectStmt->rowCount() > 0) {
             foreach ($selectStmt as $row) {
-                return $row['name'];
+                return $row['id'];
             }
         }
         return false;
@@ -839,5 +839,20 @@ class Utilities
         $filenames = array_diff($files, array('.', '..', '.gitignore'));
 
         return $filenames;
+    }
+
+    /**
+     * Function to stop software from running when something is not on the right track.
+     */
+    public function showError(string $errorMsg){
+        http_response_code(500);
+            print(json_encode(
+                [
+                    'success' => false,
+                    'message' => $errorMsg,
+                    'timestamp' => time()
+                ]
+            ));
+            die();
     }
 }
