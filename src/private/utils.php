@@ -844,15 +844,16 @@ class Utilities
     /**
      * Function to stop software from running when something is not on the right track.
      */
-    public function showError(string $errorMsg){
+    public function showError(string $errorMsg)
+    {
         http_response_code(500);
-            print(json_encode(
-                [
-                    'success' => false,
-                    'message' => $errorMsg,
-                    'timestamp' => time()
-                ]
-            ));
-            die();
+        print(json_encode(
+            [
+                'success' => false,
+                'message' => $errorMsg,
+                'timestamp' => time()
+            ]
+        ));
+        die();
     }
 }
