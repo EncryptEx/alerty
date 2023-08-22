@@ -54,7 +54,7 @@ CREATE TABLE `action-types` (
 -- Volcado de datos para la tabla `action-types`
 --
 INSERT INTO `action-types` (`id`, `name`)
-    VALUES (1, 'email');
+    VALUES (1, 'email (useful to send alerts)');
 
 -- --------------------------------------------------------
 --
@@ -114,22 +114,22 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT de la tabla `action-logs`
 --
-ALTER TABLE `action-logs` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 67;
+ALTER TABLE `action-logs` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `action-types`
 --
-ALTER TABLE `action-types` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
+ALTER TABLE `action-types` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `triggers`
 --
-ALTER TABLE `triggers` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 10;
+ALTER TABLE `triggers` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
-ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 12;
+ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 COMMIT;
 
