@@ -10,7 +10,7 @@ services:
         condition: service_healthy
     env_file:
       - .env
-
+    restart: always
   db:
     image: mysql:8.0
     restart: always
@@ -26,6 +26,6 @@ services:
     volumes:
       - ./db/database.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/mysql
-
+    restart: always
 volumes:
   db_data:
