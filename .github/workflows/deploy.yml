@@ -20,5 +20,5 @@ jobs:
         script: |
           cd webs/alerty.jaumelopez.dev
           git pull
-          sail up -d --build
-          bash start.sh
+          docker compose up -d --build
+          
