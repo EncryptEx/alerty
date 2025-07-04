@@ -2,32 +2,23 @@ name: Deploy
 
 on: 
   push:
-    branches:
-     - 'master'
+    branches: 
+     - 'main'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-
-    - name: Copy repository contents via scp
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        key: "${{ secrets.SSHKEY }}"
-        source: "."
-        target: "${{ secrets.PATH }}"
-
-    - name: Executing remote command
-      uses: appleboy/ssh-action@master  
+    - name: Executing remote deploy commands
+      uses: appleboy/ssh-action@v1.2.2  
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
         key: ${{ secrets.SSHKEY }}
-        script: ${{ secrets.SCRIPT }}
+        script: |
+          cd webs/alerty.jaumelopez.dev
+          git pull
+          sail up -d --build
+          bash start.sh

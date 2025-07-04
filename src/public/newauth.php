@@ -1,5 +1,5 @@
 <?php 
-require_once('./../private/utils.php');
+require_once(__DIR__ . '/../private/utils.php');
 use \Utils\Utilities;
 $utils = new Utilities();
 

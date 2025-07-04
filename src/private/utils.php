@@ -11,13 +11,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PDO;
 
 # start vendors
-require realpath('./../../vendor/autoload.php');
+require realpath(__DIR__ . '/vendor/autoload.php');
 
 # change timezone
 date_default_timezone_set('Europe/Madrid');
 
 # import all credentials to $_ENV superglobal
-require 'cred.php';
+require __DIR__ . '/cred.php';
 
 
 class Utilities
