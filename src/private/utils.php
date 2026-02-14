@@ -154,6 +154,7 @@ class Utilities
         //Server settings
         $mail->isSMTP();
         $mail->SMTPDebug = 0; # Set 0 for non-debug, 2 for full debug.
+        $mail->Debugoutput = 'error_log';
         $mail->SMTPAuth = true;
         $mail->CharSet = 'UTF-8';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // tls implicit
@@ -162,6 +163,8 @@ class Utilities
         $mail->Password = $_ENV['MAIL_PWD'];
         $mail->Host = $_ENV['MAIL_HOST'];
         $mail->Mailer = "smtp";              //Send using SMTP
+        $mail->Timeout = 5;
+        $mail->SMTPKeepAlive = false;
 
         // retrieve the data of the trigger's owner
         $ownerData = $this->getOwnerData($ownerId);
@@ -618,6 +621,7 @@ class Utilities
         //Server settings
         $mail->isSMTP();
         $mail->SMTPDebug = 0; # Set 0 for non-debug, 2 for full debug.
+        $mail->Debugoutput = 'error_log';
         $mail->SMTPAuth = true;
         $mail->CharSet = 'UTF-8';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // tls implicit
@@ -626,6 +630,8 @@ class Utilities
         $mail->Password = $_ENV['MAIL_PWD'];
         $mail->Host = $_ENV['MAIL_HOST'];
         $mail->Mailer = "smtp";              //Send using SMTP
+        $mail->Timeout = 5;
+        $mail->SMTPKeepAlive = false;
 
         // Add recipient
         $mail->addAddress($email);

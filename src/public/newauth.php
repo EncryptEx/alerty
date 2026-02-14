@@ -31,11 +31,14 @@ if(boolval($registerResult)) {
 
     if(!$result['success']){
         header("location:register.php?e=2");
+        exit;
     }
     header("location:login.php?s=1");
+    exit;
 } else {
     // return errror
     header('location:register.php?e=3');
+    exit;
 }
 
 ?>
