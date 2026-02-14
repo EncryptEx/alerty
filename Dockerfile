@@ -33,7 +33,7 @@ RUN composer install --no-dev --optimize-autoloader
 COPY . .
 
 # Move vendor folder to the correct location
-RUN mv vendor src/private/vendor
+RUN rm -rf src/private/vendor && mv vendor src/private/vendor
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/src/private/uploads

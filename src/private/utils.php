@@ -11,7 +11,17 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PDO;
 
 # start vendors
-require realpath(__DIR__ . '/vendor/autoload.php');
+$autoloadPath = __DIR__ . '/vendor/autoload.php';
+if (!is_file($autoloadPath)) {
+    $nestedPath = __DIR__ . '/vendor/vendor/autoload.php';
+    if (is_file($nestedPath)) {
+        $autoloadPath = $nestedPath;
+    }
+}
+if (!is_file($autoloadPath)) {
+    throw new \RuntimeException('Composer autoload.php not found.');
+}
+require $autoloadPath;
 
 # change timezone
 date_default_timezone_set('Europe/Madrid');
